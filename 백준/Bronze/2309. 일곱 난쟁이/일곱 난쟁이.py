@@ -1,12 +1,10 @@
+from itertools import combinations
+
 a = [int(input()) for __ in range(9)]
 a.sort()
-
-for i in range(len(a)):
-    for j in range (i+1, len(a)):
-        if sum(a) - a[i] - a[j] == 100:
-            for k in range (len(a)):
-                if k == i or k == j:
-                    continue
-                else:
-                    print(a[k])
-            exit()
+for comb in combinations(a, 7):
+    if sum(comb) == 100:
+        c = list(comb)
+        
+for c in c :
+    print (c)
