@@ -3,33 +3,37 @@ from collections import defaultdict
 sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
-def path (A, graph):
-    total_path = 0
-    indoor = defaultdict(int)
-    
-    for u in graph:
-        for v in graph[u]:
-            if u < v:    
-                if A[u] == 1 and A[v] == 1:     
-                    total_path += 2
-                elif A[u] == 0 and A[v] == 1:   
-                    indoor[u] +=1               
-                elif A[u] == 1 and A[v] == 0 :  
-                    indoor[v] += 1
-    
-    for outside in indoor: 
-        n = indoor[outside]
-        total_path += n* (n-1)  
-    return total_path
+def dfs(v):
+    cnt = 0
+    for v_next in graph[v]:
+        if A[v_next] == 0:
+            if not visited[v_next]:
+                visited[v_next] = 1
+                cnt += dfs(v_next)
+        else:
+            cnt +=1 
+    return cnt
 
 N = int(input())
-s = input().strip()
-A = [0] + list(map(int, s))
+A = [0] + list(map(int, input().strip()))
 graph = defaultdict(list)
+visited = [0]*(N+1)
+
 for _ in range(N - 1):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
+    
+result = 0
 
-result = path(A, graph)
+for i in range(1, N+1):
+    if A[i] == 0 :
+        if not visited[i] :
+            visited[i] = 1
+            cnt = dfs(i)
+            result += cnt * (cnt-1)
+    else :
+        for v_next in graph[i]:
+            if A[v_next] == 1:
+                result += 1
 print(result)
